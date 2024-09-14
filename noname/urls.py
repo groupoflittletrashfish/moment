@@ -22,6 +22,7 @@ import user.regiest_view
 import user.views
 from common.views import upload_file
 from moment.views import publish, query_all_moment
+from user.views import get_user_info
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('upload', upload_file),
     path('moment/publish', publish),
     path('moment/queryAllMoment', query_all_moment),
+    path('user/getUserInfo', get_user_info)
 ]

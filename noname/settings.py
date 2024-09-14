@@ -182,9 +182,10 @@ LOGGING = {
 ftp = {
     'host': '139.224.163.144',
     'port': 21,
-    'user': 'root',
+    'user': 'noname',
     'password': 'Lwm@1e5ghj9',
-    'path': '/media'
+    'path': '/moment/media',
+    'url': 'http://139.224.163.144:9000'
 }
 
 # 在 settings.py 最下面加入

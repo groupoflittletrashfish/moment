@@ -1,6 +1,11 @@
 import json
 
+import jwt
 from django.http import HttpResponse
+
+from common.config.DatabaseConf import DatabaseSession
+from common.pojo.MyJsonResponse import SuccessResponse
+from noname import settings
 
 
 def hello_world(request):
@@ -27,3 +32,35 @@ def post(request):
     for item in group:
         print(item)
     return HttpResponse('ok')
+
+
+def get_user_info(request):
+    token = request.headers.get('token')
+    user_info = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+    query_sql = """
+        SELECT
+            m.username,
+            m.email,
+            s.phone,
+            s.nickname,
+            s.avatar,
+            s.sex,
+            s.sign 
+        FROM
+            auth_user m
+            LEFT JOIN user_extra s ON m.id = s.user_id 
+            AND s.DEL_FLAG = 'N' 
+        WHERE
+            m.is_active = 1
+            AND m.id = '%(user_id)s'
+    """
+    session = DatabaseSession()
+    result = session.read_sql(query_sql, {'user_id': user_info['user_id']})
+    result['avatar'] = result['avatar'].apply(lambda x: settings.ftp['url'] + x)
+    """
+    默认查出来是个数组,那直接转成json数组返回即可，orient='records'的作用是在如果查询一条都没命中，会返回一个全空的对象，所以要解决这个
+    result.to_json(orient='records')
+    """
+    # 但这种情况下明确知道只有一条，所以获取第一条
+    row = result.iloc[0]
+    return SuccessResponse(row.to_json())
