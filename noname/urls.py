@@ -21,7 +21,7 @@ import user.login_view
 import user.regiest_view
 import user.views
 from common.views import upload_file
-from moment.views import publish, query_all_moment
+from moment.views import publish, query_all_moment, query_all_tags, addTag
 from user.views import get_user_info
 
 urlpatterns = [
@@ -31,7 +31,9 @@ urlpatterns = [
     path('login', user.login_view.login),
     path('regiest', user.regiest_view.regiest),
     path('upload', upload_file),
+    path('user/getUserInfo', get_user_info),
     path('moment/publish', publish),
     path('moment/queryAllMoment', query_all_moment),
-    path('user/getUserInfo', get_user_info)
+    path('moment/queryAllTags', query_all_tags),
+    path('moment/addTag', addTag),
 ]

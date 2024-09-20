@@ -77,18 +77,38 @@ class Moment(Base):
     UPDATED_TIME = Column(DateTime, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"), comment='更新时间')
 
 
-class UserInfo(Base):
-    __tablename__ = 'user_info'
+class MomentTag(Base):
+    __tablename__ = 'moment_tags'
+    __table_args__ = {'comment': '时刻标签表'}
 
-    ip = Column(String(32), primary_key=True)
-    name = Column(String(32), nullable=False)
-    password = Column(String(100), nullable=False)
-    email = Column(String(100), nullable=False)
-    full_name = Column(String(32), nullable=False)
-    phone = Column(String(32), nullable=False)
-    created_date = Column(DATETIME(fsp=6), nullable=False)
-    created_by = Column(String(32), nullable=False)
-    updated_by = Column(String(32), nullable=False)
+    ID = Column(String(32), primary_key=True, comment='主键')
+    tag_desc = Column(String(10), comment='标签描述')
+    DEL_FLAG = Column(String(1), nullable=False, server_default=text("'N'"), comment='删除标识')
+    REVISION = Column(String(32), comment='乐观锁')
+    CREATED_BY = Column(String(32), comment='创建人')
+    CREATED_TIME = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"), comment='创建时间')
+    UPDATED_BY = Column(String(32), comment='更新人')
+    UPDATED_TIME = Column(DateTime, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"), comment='更新时间')
+
+
+class UserExtra(Base):
+    __tablename__ = 'user_extra'
+    __table_args__ = {'comment': '用户额外信息表'}
+
+    ID = Column(String(32), primary_key=True, comment='主键')
+    user_id = Column(String(50), nullable=False, comment='关联的用户ID')
+    nickname = Column(String(50), nullable=False, comment='昵称')
+    avatar = Column(String(255), nullable=False, comment='头像地址')
+    sex = Column(String(255), comment='性别;')
+    birthday = Column(DateTime, comment='生日')
+    phone = Column(String(50), comment='手机号')
+    sign = Column(String(255), comment='签名;')
+    DEL_FLAG = Column(String(1), nullable=False, server_default=text("'N'"), comment='删除标识')
+    REVISION = Column(String(32), comment='乐观锁')
+    CREATED_BY = Column(String(32), comment='创建人')
+    CREATED_TIME = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"), comment='创建时间')
+    UPDATED_BY = Column(String(32), comment='更新人')
+    UPDATED_TIME = Column(DateTime, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"), comment='更新时间')
 
 
 class AuthPermission(Base):

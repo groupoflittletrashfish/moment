@@ -28,4 +28,4 @@ def login(request):
     }
     # settings.SECRET_KEY是配置在settings.py里的密钥
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-    return SuccessResponse(token)
+    return SuccessResponse({'token': token})
