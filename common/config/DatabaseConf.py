@@ -70,3 +70,15 @@ class DatabaseSession:
 
     def read_sql(self, query, params=None):
         return pd.read_sql_query(sql=query, con=self.engine, params=params)
+
+    @staticmethod
+    def page(index, offset):
+        index = int(index)
+        offset = int(offset)
+        if index <= 0:
+            index = 1
+        page = (index - 1) * offset
+        return {
+            'page': page,
+            'offset': offset
+        }

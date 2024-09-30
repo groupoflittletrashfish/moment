@@ -2,9 +2,11 @@ import json
 
 import jwt
 from django.http import HttpResponse
+from rest_framework.decorators import api_view
 
 from common.config.DatabaseConf import DatabaseSession
 from common.pojo.MyJsonResponse import SuccessResponse
+from common.utils.commonUtils import get_user
 from noname import settings
 
 
@@ -45,7 +47,9 @@ def get_user_info(request):
             s.nickname,
             s.avatar,
             s.sex,
-            s.sign 
+            s.sign,
+            s.netease_cloud_phone,
+            s.netease_cloud_password
         FROM
             auth_user m
             LEFT JOIN user_extra s ON m.id = s.user_id 
@@ -64,3 +68,24 @@ def get_user_info(request):
     # 但这种情况下明确知道只有一条，所以获取第一条
     row = result.iloc[0]
     return SuccessResponse(row.to_json())
+
+
+# 绑定网易云音乐
+@api_view(['POST'])
+def bind_netease_cloud(request):
+    user_info = get_user(request)
+    params = json.loads(request.body)
+    phone = None if params.get('phone') == '' else params.get('phone')
+    pwd = None if params.get('password') == '' else params.get('password')
+    upt_sql = """
+        UPDATE user_extra 
+            SET 
+            netease_cloud_phone = :phone,
+            netease_cloud_password = :password
+        WHERE
+            user_id = :userId
+    """
+    session = DatabaseSession().get_session()
+    session.execute(upt_sql, {'phone': phone, 'password': pwd, 'userId': user_info['user_id']})
+    session.commit()
+    return SuccessResponse()

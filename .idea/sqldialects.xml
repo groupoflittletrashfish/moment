@@ -4,4 +4,7 @@
     <file url="file://$PROJECT_DIR$/moment/views.py" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/user/views.py" dialect="MySQL" />
   </component>
+  <component name="SqlResolveMappings">
+    <file url="file://$PROJECT_DIR$/moment/views.py" scope="{&quot;node&quot;:{  &quot;@negative&quot;:&quot;1&quot;,  &quot;group&quot;:{   &quot;@kind&quot;:&quot;root&quot;,   &quot;node&quot;:{    &quot;name&quot;:{     &quot;@qname&quot;:&quot;b0fc6ccf-1ee7-4514-a575-0b380cb2bf1e&quot;    },    &quot;group&quot;:{     &quot;@kind&quot;:&quot;schema&quot;,     &quot;node&quot;:{      &quot;name&quot;:{       &quot;@qname&quot;:&quot;noname&quot;      }     }    }   }  } }}" />
+  </component>
 </project>

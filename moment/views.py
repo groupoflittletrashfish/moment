@@ -3,6 +3,7 @@ import json
 
 from rest_framework.decorators import api_view
 
+from common.config import DatabaseConf
 from common.config.DatabaseConf import DatabaseSession
 from common.models import Moment, MomentTag
 from common.pojo.MyJsonResponse import SuccessResponse
@@ -24,6 +25,8 @@ def publish(request):
 
 @api_view(['GET'])
 def query_all_moment(request):
+    index = request.query_params.get('index', 1)
+    offset = request.query_params.get('offset', 2)
     query_sql = """
     SELECT
         s.nickname,
@@ -38,9 +41,11 @@ def query_all_moment(request):
     WHERE
         m.del_flag = 'N'
     ORDER BY m.CREATED_TIME DESC
+    limit %(page)s, %(offset)s
     """
     session = DatabaseSession()
-    result = session.read_sql(query_sql)
+    page_info = DatabaseSession.page(index, offset)
+    result = session.read_sql(query_sql, {'page': page_info['page'], 'offset': page_info['offset']})
     if not result.empty:
         result['momentMedia'] = result['momentMedia'].apply(
             lambda x: [settings.ftp['url'] + item for item in json.loads(x)])
